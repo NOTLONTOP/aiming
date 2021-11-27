@@ -109,3 +109,16 @@ RS.Heartbeat:Connect(function()
     end
 end)
 
+local __index2 = nil
+__index2 = hookmetamethod(game, "__index", function(t, k)
+    if t == Mouse and tostring(k) == "Hit" then
+        local m_n = m_nearest(Mouse.X, Mouse.Y)
+        if DoCheck(m_n) and (not AimingModule.VisCheck or IsVisible(m_n.Character.Head.Position, {m_n.Character, LocalP.Character, currentCamera}) == true) and AimingModule.SilentAim and StoredMag ~= nil and (not AimingModule.ShowFOV or AimingModule.FOVSize > StoredMag) then
+            local tpart = m_n.Character.Head
+            local tHit = tpart.CFrame + (tpart.Velocity * 0.165)
+            return (k == "Hit" and tHit or tpart)
+        end
+    end
+
+    return __index2(t, k)
+end)
